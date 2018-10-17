@@ -32,20 +32,6 @@ fprintf(result, "\n");
 
 fclose(result);
 }
-
-void Write2File2(float *T, int size)
-{
-FILE *result=fopen("result3.txt", "a");
-int i;
-
-for(i=0;i<size;i++) 
-{
-fprintf(result, "%lf", *(T+i));
-fprintf(result, "\n");
-}
-
-fclose(result);
-}
 //=========================
 void KhoiTao(float *T)
 {
@@ -54,11 +40,11 @@ for (  i = 0 ; i < M ; i++ )
      *(T+i) = 25.0;
 }
 //=========================
-void Daoham(float *T, float *dT)
+void Daoham(float *T, float *dT,int start,int stop)
 {
 int i;
 float c,l,r;
-for (  i = 0 ; i < M ; i++ )
+for (  i = start ; i < stop ; i++ )
     {
       c = *(T+i);
       l = (i==0)   ? 100.0 : *(T+(i-1));
@@ -79,22 +65,28 @@ int main()
 	DisplayArray(T, M);
 //	Write2File(T,M);
 	Ntime = Time/dt;
-
 	omp_set_num_threads(5);
 	#pragma omp parallel private(id,i,stt,stp)
 	{
 		id = omp_get_thread_num();
 		stt = id*Ntime; stp = id*Ntime+Ntime;
 		for (t=stt;t<stp;t++){
-	     Daoham(T, dT);
-	  for (  i = 0 ; i < M ; i++ )
-	      *(T+i) = *(T+i) + D*dt*(*(dT+i));
+			#pragma omp barrier 
+			{
+            Daoham(T, dT,stt,stp);
+			}
+	        #pragma omp barrier 
+			{
+            for (  i = 0 ; i < M ; i++ )
+	            *(T+i) = *(T+i) + D*dt*(*(dT+i));
+			}
+			
 	  Write2File(T,M);
 	}
 
 
 	}
-		printf("Result of C:\n");
+	printf("Result of C:\n");
 	DisplayArray(T, M);
 	
 return 0;
