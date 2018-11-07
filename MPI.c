@@ -6,7 +6,7 @@ int main(int args, char **arrgv){
 	MPI_Init(&args,&arrgv);
 	MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 	MPI_Comm_size(MPI_COMM_WORLD,&size);
-    pritf('Hello :rank %d,word :%d \n',rank,size)
-	MPI_Finalize();
+    printf('Hello :rank %d,word :%d \n',rank,size);
+	//MPI_Finalize();
 	return 0;
 }

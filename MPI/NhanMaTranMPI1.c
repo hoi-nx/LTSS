@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <mpi.h>
-#include <malloc.h>
 #define m 8
 #define n 8
 #define p 4

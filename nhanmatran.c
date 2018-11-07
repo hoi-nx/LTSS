@@ -1,6 +1,5 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <omp.h>
-#include <malloc.h>
 int main()
 {
 	int n=5,m=4,p=2,i,j,k,s,id,stt,stp;
@@ -38,8 +37,7 @@ int main()
 	#pragma omp parallel private(s,id,stt,stp,j,k) 
 	{
 		id = omp_get_thread_num();
-	
-			for (j=0;j<p;j++){
+			for (j=id;j<p;j++){
 				s = 0;
 				for (k=0;k<m;k++){
 					s += A[id][k]*B[k][j];
