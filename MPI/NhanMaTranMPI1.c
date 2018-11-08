@@ -24,7 +24,7 @@ int *Ac, *Cc, *Bc;
 Ac = (int *) malloc (sizeof(int)*mc*n);
 Bc = (int *) malloc (sizeof(int)*n*p);
 Cc = (int *) malloc (sizeof(int)*mc*p);
-//2-Khoi tao
+//2-Khoi tao Mang A B
 if (rank==0){
 	for (i=0;i<m;i++)
 		for (j=0;j<n;j++)
@@ -35,9 +35,9 @@ if (rank==0){
 	for (i=0;i<n;i++)
 		for (j=0;j<p;j++)
 			*(B+i*p+j) = i*p+j;
-	for (i=0;i<m;i++)
-		for (j=0;j<p;j++)
-			*(C+i*p+j) = 0;	
+//    for (i=0;i<m;i++)
+//        for (j=0;j<p;j++)
+//            *(C+i*p+j) = 0;    
 }
     
     //Display ma trận A B C
