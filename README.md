@@ -1,0 +1,2 @@
+# LTSS
+Using OPENMP AND 
