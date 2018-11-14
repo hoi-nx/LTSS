@@ -32,6 +32,7 @@ int main()
 		}
 		printf("\n");
 	}
+    printf("%d ",C[1][j]);
 	printf("Using openmp--------------------------\n");
 	omp_set_num_threads(n);
 	#pragma omp parallel private(s,id,stt,stp,j,k) 
