@@ -3,9 +3,9 @@
 #include <math.h>
 #include <mpi.h>
 
-#define  m       20
-#define  n       10
-#define  T       2
+#define  m       50
+#define  n       50
+#define  T       10
 #define  dt      0.01
 #define  dx      0.1
 #define  D       0.1
@@ -19,9 +19,9 @@ void DisplayMatrix(float *A, int row,  int col)
   }
 }
 //==================================
-void Write2File(float *C)
+void Write2File(float *C,char str[])
 {
-  FILE *result=fopen("result.txt", "a");
+  FILE *result=fopen(str, "a");
   int i,j;
   for(i=0;i<m;i++) 
   {
@@ -39,7 +39,7 @@ void KhoiTao(float *C)
   int i,j;
 for (  i = 0 ; i < m ; i++ )
   for ( j = 0 ; j < n ; j++ ){
-    if (i>=(m/2-2)&&i<(m/2+2)&&j>=(n/2-2)&&j<(n/2+2)) 
+    if (i>=(m/2-5)&&i<(m/2+5)&&j>=(n/2-5)&&j<(n/2+5))
       *(C+i*n+j) = 80.0;
     else
       *(C+i*n+j) = 25.0;
@@ -53,6 +53,9 @@ float c,u,d,l,r;
 for (  i = 0 ; i < ms ; i++ )
   for ( j = 0 ; j < n ; j++ )
     {
+        if (j>=(n/2-5)&&j<(n/2+5)) {
+            continue;
+        }
       c = *(Cs+i*n+j);
       u = (i==0)    ? *(Cu+j)     : *(Cs+(i-1)*n+j);
       d = (i==ms-1) ? *(Cd+j)     : *(Cs+(i+1)*n+j);
@@ -93,6 +96,7 @@ main(int argc, char *argv[])
 //==================================
   if (rank==0) {
     KhoiTao(C);
+      Write2File(C,"result1.csv");
 //    printf("Gia tri khoi tao:\n");
 //    DisplayMatrix(C, m, n);
   }
@@ -109,7 +113,7 @@ main(int argc, char *argv[])
 while (t<=T)
 {
   if (rank==0){
-    for (j=0;j<n;j++) *(Cu+j) = *(Cs+0*n+j);
+    for (j=0;j<n;j++) *(Cu+j) = *(Cs+25*n+j);
     MPI_Send(Cs+(mc-1)*n,n,MPI_FLOAT,rank+1,rank,MPI_COMM_WORLD);
   } else if (rank==NP-1) {
     MPI_Recv(Cu,n,MPI_FLOAT,rank-1,rank-1,MPI_COMM_WORLD,&status);
@@ -142,17 +146,14 @@ while (t<=T)
 
 //==================================
 // Gui Ma tran C tu tat ca cac Core ve Core 0
-  MPI_Gather(Cs,mc*n,MPI_FLOAT,
-             C,mc*n,MPI_FLOAT,0,
-             MPI_COMM_WORLD);
+  MPI_Gather(Cs,mc*n,MPI_FLOAT,C,mc*n,MPI_FLOAT,0,MPI_COMM_WORLD);
   t2 = MPI_Wtime();
   printf ("\tThe Calculation time:%f\n",(t2 - t1));
-// In Ket Qua Tai Core 0
   if (rank==0)
     {
       printf( "Ma tran C:\n");
       DisplayMatrix(C, m, n);
-      Write2File(C);
+      Write2File(C,"result.csv");
     }
     
 //==================================

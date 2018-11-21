@@ -5,7 +5,7 @@
 #include <mpi.h>
 
 #define  m       20
-#define  Time    10
+#define  Time    10 //thời gian 
 #define  dt      0.01
 #define  dx      0.1
 #define  D       0.1
@@ -26,7 +26,7 @@ void Write2File(float *T, int size)
     
     for(i=0;i<size;i++)
     {
-        fprintf(result, "%lf", *(T+i));
+        fprintf(result, "%lf`", *(T+i));
         fprintf(result, "\n");
     }
     
@@ -87,6 +87,8 @@ int main(int argc, char *argv[])
         KhoiTao(C);
         DisplayArray(C,m);
     }
+    //Returns an elapsed time on the calling processor
+    //MPI_WTIME returns a floating-point number of seconds, representing elapsed wall-clock time since some time in the past.
     t1 = MPI_Wtime();
     
     MPI_Scatter(C,mc,MPI_FLOAT,Cs,mc,MPI_FLOAT,0,MPI_COMM_WORLD);
@@ -111,7 +113,7 @@ int main(int argc, char *argv[])
             Tr = 25;
             MPI_Send (Cs, 1, MPI_FLOAT, rank - 1, rank, MPI_COMM_WORLD);
         } else if (rank == 0) {
-            MPI_Recv (&Tr, m, MPI_FLOAT, rank + 1, rank + 1, MPI_COMM_WORLD, &stat);
+            MPI_Recv (&Tr, 1, MPI_FLOAT, rank + 1, rank + 1, MPI_COMM_WORLD, &stat);
         } else {
             MPI_Send (Cs, 1, MPI_FLOAT, rank - 1, rank, MPI_COMM_WORLD);
             MPI_Recv (&Tr, 1, MPI_FLOAT, rank + 1, rank + 1, MPI_COMM_WORLD, &stat);
@@ -125,13 +127,13 @@ int main(int argc, char *argv[])
         DHB2(Cs,Tl,Tr,dTs,mc,rank,NP);
         ///
         for (  i = 0 ; i < mc ; i++ )
-            *(Cs+i) = *(Cs+i) + *(dTs+i)*dt*D;
+            *(Cs+i) = *(Cs+i) + *(dTs+i)*dt;
         Write2File(Cs,mc);
         t=t+dt;
     }
     MPI_Gather(Cs,mc,MPI_FLOAT,C,mc,MPI_FLOAT,0,MPI_COMM_WORLD);
     t2 = MPI_Wtime();
-   printf ("\tThời gian tính toán :%f\n",(t2 - t1));
+   printf ("\tThời gian tính toán của luồng %d là= %f\n",rank,(t2 - t1));
     if(rank==0){
         printf( "Ma tran C:\n");
         DisplayArray(C,m);

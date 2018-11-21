@@ -62,7 +62,6 @@ void DHB2(float *Ts, float Tl, float Tr, float *dTs ,int ms,int id,int NP) {
 int main(int argc, char *argv[])
 {
     int i, j,NTime;
-    float t; t=0;
     int NP,rank,mc; MPI_Status stat;
     float *C,*Cs,*Ts,*dTs;
     float Tl,Tr;
@@ -93,9 +92,9 @@ int main(int argc, char *argv[])
     DisplayArray(Cs, mc);
     
     NTime=Time/dt;
-    int t;
+    int t3;
     
-    for(t=0;t<NTime;t++){
+    for(t3=0;t3<NTime;t3++){
         if (rank == 0){
             Tl = 100;
             MPI_Send (Cs + mc - 1, 1, MPI_FLOAT, rank + 1, rank, MPI_COMM_WORLD);
@@ -131,11 +130,6 @@ int main(int argc, char *argv[])
     }
     
     
-    
-    
-//    while (t<=Time) {
-//       
-//    }
     MPI_Gather(Cs,mc,MPI_FLOAT,C,mc,MPI_FLOAT,0,MPI_COMM_WORLD);
     if(rank==0){
         printf( "Ma tran C:\n");
