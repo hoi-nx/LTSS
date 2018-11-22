@@ -46,14 +46,14 @@ for (  i = 0 ; i < m ; i++ )
   }
 }
 //==================================
-void FD(float *Cs,float *Cu,float *Cd,float *dCs,int ms)
+void FD(float *Cs,float *Cu,float *Cd,float *dCs,int ms,int rank)
 {
 int i, j;
 float c,u,d,l,r;
 for (  i = 0 ; i < ms ; i++ )
   for ( j = 0 ; j < n ; j++ )
     {
-        if (j>=(n/2-5)&&j<(n/2+5)) {
+        if ((ms*rank+i>=(m/2-5)&&ms*rank+i<(m/2+5))&&(j>=(n/2-5)&&j<(n/2+5))) {
             continue;
         }
       c = *(Cs+i*n+j);
@@ -135,7 +135,7 @@ while (t<=T)
 //      printf( "Ma tran Cu tai core %d is:\n", rank);
 //      DisplayMatrix(Cu, 1, n);printf("\n");
   
-  FD(Cs,Cu,Cd,dCs,mc);
+  FD(Cs,Cu,Cd,dCs,mc,rank);
 //     
   for (  i = 0 ; i < mc ; i++ )
     for ( j = 0 ; j < n ; j++ )
