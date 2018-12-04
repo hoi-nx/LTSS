@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-
 #define  m       1000
 #define  n       1000
 #define  T       100
