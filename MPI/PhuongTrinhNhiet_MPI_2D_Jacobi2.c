@@ -10,7 +10,7 @@
 #define  dt      0.01
 #define  dx      0.1
 #define  D       0.1
-#define  epsilon 1.0e-2
+#define  epsilon 0.00001
 //==================================
 void DisplayMatrix(float *A, int row,  int col)
 {
