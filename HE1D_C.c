@@ -70,7 +70,7 @@ int main()
 	{
 		id = omp_get_thread_num();
 		stt = id*Ntime; stp = id*Ntime+Ntime;
-		for (t=stt;t<stp;t++){
+    for (t=stt;t<stp;t++){
 	  Daoham(T, dT,stt,stp);
 	  for (  i = 0 ; i < M ; i++ )
 	      *(T+i) = *(T+i) + D*dt*(*(dT+i));
